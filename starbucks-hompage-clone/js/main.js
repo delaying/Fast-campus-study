@@ -21,6 +21,7 @@ searchInputEl.addEventListener("blur", function () {
 
 //document객체는 html의 명령을 가지고있음
 const badgeEl = document.querySelector("header .badges");
+const toTopEl = document.querySelector("#to-top");
 
 //window객체는 브라우저창의 명령을 가지고있음. 보고있는 화면자체!
 // _.throttle(함수,시간)
@@ -28,7 +29,6 @@ const badgeEl = document.querySelector("header .badges");
 window.addEventListener(
   "scroll",
   _.throttle(function () {
-    console.log(window.scrollY);
     // scrollY는 스크롤의 현재위치임. console로 확인해서 사용!
     if (window.scrollY > 500) {
       //배지 숨기기
@@ -39,16 +39,31 @@ window.addEventListener(
         // opacity만 설정시 눈에만 안보이고 요소는 남아있으므로
         //display의 none을 사용하여 실제로 요소도 없애는 코드!
         display: "none",
-      });
+      }),
+        //상단이동버튼 보이기
+        gsap.to(toTopEl, 0.2, {
+          x: 0, //x축으로 얼마만큼 이동하는지
+        });
     } else {
       //배지 보이기
       gsap.to(badgeEl, 0.6, {
         opacity: 1,
         display: "block",
-      });
+      }),
+        //상단이동버튼 숨기기
+        gsap.to(toTopEl, 0.2, {
+          x: 100, //x축으로 얼마만큼 이동하는지
+        });
     }
   }, 300)
 );
+
+toTopEl.addEventListener("click", function () {
+  gsap.to(window, 0.7, {
+    //window는 화면자체
+    scrollTo: 0, //0초 동안 옮겨준다는 것.
+  });
+});
 
 // 메인페이지 각각의 이미지 애니메이션 주기
 const fadeEls = document.querySelectorAll(".visual .fade-in");
@@ -84,6 +99,17 @@ new Swiper(".promotion .swiper", {
     nextEl: ".promotion .swiper-next",
   },
 });
+// awards swiper
+new Swiper(".awards .swiper", {
+  autoplay: true,
+  loop: true,
+  spaceBetween: 30, //사이여백을 30px로 지정
+  slidesPerView: 5, //한 화면에 보이는 슬라이드 개수
+  navigation: {
+    prevEl: ".awards .swiper-prev",
+    nextEl: ".awards .swiper-next",
+  },
+});
 
 // toggle promotion
 const promotionEl = document.querySelector(".promotion");
@@ -97,3 +123,44 @@ promotionToggleBtn.addEventListener("click", function () {
     promotionEl.classList.remove("hide");
   }
 });
+
+// youtube floating setting
+
+// 범위 랜덤 함수(소수점 2자리까지)
+function random(min, max) {
+  // `.toFixed()`를 통해 반환된 문자 데이터를,
+  // `parseFloat()`을 통해 소수점을 가지는 숫자 데이터로 변환
+  return parseFloat((Math.random() * (max - min) + min).toFixed(2));
+}
+
+function floatingObject(selector, delay, size) {
+  // gsap.to(요소,시간,옵션);
+  gsap.to(selector, random(1.5, 2.5), {
+    y: size, //y축 움직임을 지정
+    repeat: -1, //무한반복설정
+    yoyo: true, //한번재생된 애니메이션을 다시 역재생
+    ease: Power1.easeInOut, //easeInOut함수적용
+    delay: random(0, delay),
+  });
+}
+floatingObject(".floating1", 1, 15);
+floatingObject(".floating2", 0.5, 15);
+floatingObject(".floating3", 1.5, 20);
+
+// scrollMagic
+const spyEls = document.querySelectorAll("section.scroll-spy");
+spyEls.forEach(function (spyEl) {
+  // scene : 특정요소를 감시하는 메소드
+  //setClasstoggle : 클래스속성 제어 (삽입,삭제)
+  // addTo : scrollmagic의 컨트롤러이므로 작성해야함
+  new ScrollMagic.Scene({
+    triggerElement: spyEl, //보여짐 여부를 감시할 요소를 지정
+    triggerHook: 0.8, //감시하는 요소가 뷰포트의 8/10지점에 걸리면 trigger실행
+  })
+    .setClassToggle(spyEl, "show")
+    .addTo(new ScrollMagic.Controller());
+});
+
+// copyright this-year 설정
+const thisyear = document.querySelector(".this-year");
+thisyear.textContent = new Date().getFullYear();
