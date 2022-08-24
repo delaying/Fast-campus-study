@@ -105,3 +105,51 @@ const daughtersCar = new Car("포르쉐", 4, false);
 
 console.log(myCar);
 console.log(daughtersCar);
+
+//.filter()
+const numbers = [1, 2, 3, 4];
+const fruits = ["apple", "banana", "cherry"];
+
+const filt = numbers.filter((number) => number < 3);
+console.log(filt);
+
+//.find() .findIndex()
+const fin = fruits.find((fruit) => /^b/.test(fruit));
+console.log(fin);
+
+//.includes()
+const incl = numbers.includes(3);
+console.log(incl);
+
+//.push()  .unshift()
+//원본 수정됨!
+numbers.push(5);
+console.log(numbers);
+
+//splice()
+numbers.splice(2, 1, 99);
+console.log(numbers);
+
+//Object.assing()
+const userAge = {
+  //key:value
+  name: "jiyeon",
+  age: 23,
+};
+const userEmail = {
+  name: "jiyeon",
+  email: "pgy5638@naver.com",
+};
+
+const target = Object.assign(userAge, userEmail);
+console.log(target);
+console.log(userAge);
+console.log(target === userAge);
+
+//응용
+console.log(userAge["age"]);
+
+const keys = Object.keys(userAge);
+
+const values = keys.map((key) => userAge[key]);
+console.log(values);
