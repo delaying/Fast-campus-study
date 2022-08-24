@@ -1,155 +1,57 @@
-//콜백함수
-function timeout(callback) {
-  setTimeout(() => {
-    console.log("hi");
-    callback();
-  }, 3000);
-}
-
-timeout(() => {
-  console.log("done");
-});
-
-//생성자 함수
-function User(first, last) {
-  this.firstName = first;
-  this.lastName = last;
-}
-
-User.prototype.getFullName = function () {
-  return `${this.firstName} ${this.lastName}`;
-};
-
-const delay = new User("delay", "park");
-const amy = new User("amy", "clas");
-
-console.log(delay);
-console.log(amy);
-console.log(delay.getFullName());
-
-//this
-
-function NewUser(name) {
-  this.name = name;
-}
-
-NewUser.prototype.normal = function () {
-  console.log(this.name);
-};
-NewUser.prototype.arrow = () => {
-  console.log(this.name);
-};
-
-const name = new NewUser("delay");
-
-//ES6 Classes
-const heropy = {
-  name: "Heropy",
-  normal() {
-    console.log(this.name);
-  },
-};
-
-heropy.normal();
-
-// function User(first, last) {
-//   this.firstName = first;
-//   this.lastName = last;
-// }
-
-// User.prototype.getFullName = function () {
-//   return `${this.firstName} ${this.lastName}`;
-// };
-
-class UserClass {
-  //constructor: function(first,last)와 같음
-  constructor(first, last) {
-    this.firstName = first;
-    this.lastName = last;
-  }
-  //자동으로 prototype 메소드 만들수있음
-  getFullName() {
-    return `${this.firstName} ${this.lastName}`;
-  }
-}
-
-//상속(확장)
-class Vehicle {
-  constructor(name, wheel) {
-    this.name = name;
-    this.wheel = wheel;
-  }
-}
-const myVehicle = new Vehicle("운송수단", 2);
-console.log(myVehicle);
-
-class Bicycle extends Vehicle {
-  constructor(name, wheel) {
-    //super는 Vehicle이 실행됨!
-    super(name, wheel);
-  }
-}
-const myBicycle = new Bicycle("삼천리", 2);
-const daughterBicycle = new Bicycle("세발", 3);
-console.log(myBicycle);
-console.log(daughterBicycle);
-
-class Car extends Vehicle {
-  constructor(name, wheel, license) {
-    super(name, wheel);
-    this.license = license;
-  }
-}
-const myCar = new Car("벤츠", 4, true);
-const daughtersCar = new Car("포르쉐", 4, false);
-
-console.log(myCar);
-console.log(daughtersCar);
-
-//.filter()
-const numbers = [1, 2, 3, 4];
-const fruits = ["apple", "banana", "cherry"];
-
-const filt = numbers.filter((number) => number < 3);
-console.log(filt);
-
-//.find() .findIndex()
-const fin = fruits.find((fruit) => /^b/.test(fruit));
-console.log(fin);
-
-//.includes()
-const incl = numbers.includes(3);
-console.log(incl);
-
-//.push()  .unshift()
-//원본 수정됨!
-numbers.push(5);
-console.log(numbers);
-
-//splice()
-numbers.splice(2, 1, 99);
-console.log(numbers);
-
-//Object.assing()
-const userAge = {
-  //key:value
+import _ from "lodash"; //lodash 는 _로우대쉬를 사용하라는것~!
+//구조 분해 할당
+//비구조화 할당
+const user = {
   name: "jiyeon",
   age: 23,
-};
-const userEmail = {
-  name: "jiyeon",
   email: "pgy5638@naver.com",
 };
+const { name, age, email, address } = user;
+//E.g, user.address
 
-const target = Object.assign(userAge, userEmail);
-console.log(target);
-console.log(userAge);
-console.log(target === userAge);
+console.log(`사용자의 이름은 ${name}입니다.`);
+console.log(`${name}의 나이는 ${age}`);
+console.log(address);
 
-//응용
-console.log(userAge["age"]);
+const fruits = ["Apple", "Banana", "Cherry", "orange"];
+const [a, b, c, d, e] = fruits;
+console.log(a, b, c, d);
 
-const keys = Object.keys(userAge);
+//전개 연산자
+console.log(fruits);
+console.log(...fruits);
 
-const values = keys.map((key) => userAge[key]);
-console.log(values);
+function toObject(a, b, ...c) {
+  return {
+    a: a,
+    b: b,
+    c: c,
+  };
+}
+
+console.log(toObject(...fruits));
+
+//데이터 불변성
+let k = { k1: 1 };
+let j = { k1: 4 };
+console.log(k, j, k === j);
+
+k.k1 = 7;
+j = k; //k메모리주소를 j가 바라보게되므로 true가 나옴
+console.log(k, j, k === j);
+
+k.k1 = 2; //j가 이미 k메모리를 바라보고있으므로 j의 k1값도 수정됨
+console.log(k, j, k === j);
+
+let i = j;
+console.log(k, j, i, k === i);
+k.k1 = 9;
+console.log(k, j, i, k === i);
+
+//얕은복사 ,깊은복사
+const copyUser = _.cloneDeep(user);
+console.log(copyUser === user); //false
+
+user.age = 22;
+console.log("user", user);
+console.log("copyUser", copyUser);
