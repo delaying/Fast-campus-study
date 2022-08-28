@@ -1,29 +1,13 @@
-//JSON
+import axios from "axios";
 
-import myData from "./myData.json";
+function fetchMovies() {
+  axios.get("https://www.omdbapi.com/?apikey=7035c60c&s=frozen").then((res) => {
+    console.log(res);
+    const h1El = document.querySelector("h1");
+    const imgEl = document.querySelector("img");
+    h1El.textContent = res.data.Search[0].Title;
+    imgEl.src = res.data.Search[0].Poster;
+  });
+}
 
-console.log(myData);
-
-const user = {
-  name: "jiyeon",
-  age: 23,
-  emails: ["pgy5638@naver.com", "neo@naver.com"],
-};
-console.log("user", user);
-
-const str = JSON.stringify(user);
-console.log("str", str);
-console.log(typeof str);
-
-const obj = JSON.parse(str);
-console.log("obj", obj);
-
-//Local Stroage
-// localStorage.setItem("user", JSON.stringify(user));
-// console.log(JSON.parse(localStorage.getItem("user")));
-
-const stri = localStorage.getItem("user");
-const obje = JSON.parse(stri);
-obje.age = 20;
-console.log(obje);
-localStorage.setItem("user", JSON.stringify(obje));
+fetchMovies();
