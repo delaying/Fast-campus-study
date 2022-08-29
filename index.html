@@ -21,18 +21,32 @@
     <script type="text/babel">
       const rtEl = document.getElementById("root");
 
-      function Number({ number }) {
-        return number % 2 === 0 ? <h1>{number}</h1> : <h3>{number}</h3>;
-      }
+      const App = () => {
+        const [keyword, setKeyword] = React.useState("");
+        const [result, setResult] = React.useState("");
+        const [typing, setTyping] = React.useState(false);
 
-      const el = (
-        <>
-          <Number number={1} />
-          <Number number={2} />
-          <Number number={3} />
-        </>
-      );
-      ReactDOM.render(el, rtEl);
+        function handleChange(event) {
+          window.localStorage.setItem("keyword", event.target.value);
+          setKeyword(event.target.value);
+          setTyping(true);
+        }
+
+        function handleClick() {
+          setTyping(false);
+          setResult(`we find results of -> ${keyword}`);
+        }
+
+        return (
+          <>
+            <input onChange={handleChange} />
+            <button onClick={handleClick}>search</button>
+            <p>{typing ? `Looking for ...${keyword}` : result} </p>
+          </>
+        );
+      };
+
+      ReactDOM.render(<App />, rtEl);
     </script>
   </body>
 </html>
