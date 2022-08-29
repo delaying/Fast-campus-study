@@ -15,38 +15,40 @@
     ></script>
     <!-- babel script  -->
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <style>
+      .button {
+        width: 100px;
+        height: 50px;
+        border-radius: 10px;
+        color: white;
+        margin: 10px;
+        border: none;
+      }
+      .red {
+        background-color: red;
+      }
+      .blue {
+        background-color: blue;
+      }
+    </style>
   </head>
   <body>
     <div id="root"></div>
     <script type="text/babel">
       const rtEl = document.getElementById("root");
 
-      const App = () => {
-        const [keyword, setKeyword] = React.useState("");
-        const [result, setResult] = React.useState("");
-        const [typing, setTyping] = React.useState(false);
+      function Button({ color, style, ...rest }) {
+        return <button className={`button ${color}`} />;
+      }
 
-        function handleChange(event) {
-          window.localStorage.setItem("keyword", event.target.value);
-          setKeyword(event.target.value);
-          setTyping(true);
-        }
+      const element = (
+        <>
+          <Button color="red">red</Button>
+          <Button color="blue">Blue</Button>
+        </>
+      );
 
-        function handleClick() {
-          setTyping(false);
-          setResult(`we find results of -> ${keyword}`);
-        }
-
-        return (
-          <>
-            <input onChange={handleChange} />
-            <button onClick={handleClick}>search</button>
-            <p>{typing ? `Looking for ...${keyword}` : result} </p>
-          </>
-        );
-      };
-
-      ReactDOM.render(<App />, rtEl);
+      ReactDOM.render(element, rtEl);
     </script>
   </body>
 </html>
